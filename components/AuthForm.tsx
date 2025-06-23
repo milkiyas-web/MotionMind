@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input"
 import Image from "next/image"
 import Link from "next/link"
 import { toast } from "sonner"
+import FormField from "./FormField"
+import { useRouter } from "next/navigation"
 
 
 const authFormSchema = (type: FormType) => {
@@ -21,6 +23,7 @@ const authFormSchema = (type: FormType) => {
 
 }
 const AuthForm = ({ type }: { type: FormType }) => {
+    const router = useRouter()
     const formSchema = authFormSchema(type)
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -35,8 +38,12 @@ const AuthForm = ({ type }: { type: FormType }) => {
         try {
             if (type === "sign-up") {
                 console.log("SIGN UP", values)
+                toast.success("Account Created Successfully. Please signin")
+                router.push("/sign-in")
             } else {
                 console.log("SIGN IN", values)
+                toast.success("Sign in Successfully.")
+                router.push('/')
             }
         } catch (err) {
             console.log(err)
@@ -54,9 +61,9 @@ const AuthForm = ({ type }: { type: FormType }) => {
                 <h3>Create 2D motions with AI</h3>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full mt-4 form">
-                        {!isSignIn && <p>Name</p>}
-                        <p>Email</p>
-                        <p>Password</p>
+                        {!isSignIn && <FormField control={form.control} name="name" type="text" label="Name" placeholder="John Doe" />}
+                        <FormField control={form.control} name="email" type="email" label="Email" placeholder="johndoe@gmail.com" />
+                        <FormField control={form.control} name="password" label="Password" type="password" placeholder="Enter your password" />
 
                         <Button type="submit" className="btn">{isSignIn ? "Sign in" : "Create an Account"}</Button>
                     </form>
