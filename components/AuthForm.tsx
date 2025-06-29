@@ -12,6 +12,7 @@ import Link from "next/link"
 import { toast } from "sonner"
 import FormField from "./FormField"
 import { useRouter } from "next/navigation"
+import { signupEmail, loginEmail } from "@/app/(auth)/actions"
 
 
 const authFormSchema = (type: FormType) => {
@@ -34,16 +35,34 @@ const AuthForm = ({ type }: { type: FormType }) => {
         },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             if (type === "sign-up") {
-                console.log("SIGN UP", values)
-                toast.success("Account Created Successfully. Please signin")
-                router.push("/sign-in")
+                // Add form data to FormData
+                const formData = new FormData();
+                formData.append('name', values.name || '');
+                formData.append('email', values.email);
+                formData.append('password', values.password);
+
+                const result = await signupEmail(null, formData);
+                if ('error' in result) {
+                    toast.error(result.error);
+                } else {
+                    toast.success("Account Created Successfully. Please signin");
+                    router.push("/sign-in");
+                }
             } else {
-                console.log("SIGN IN", values)
-                toast.success("Sign in Successfully.")
-                router.push('/')
+                const formData = new FormData();
+                formData.append('email', values.email);
+                formData.append('password', values.password);
+
+                const result = await loginEmail(null, formData);
+                if ('error' in result) {
+                    toast.error(result.error);
+                } else {
+                    toast.success("Sign in Successfully.");
+                    router.push('/');
+                }
             }
         } catch (err) {
             console.log(err)
