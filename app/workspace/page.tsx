@@ -1,9 +1,11 @@
 "use client"
 import Sidebar from '@/components/Sidebar'
 import { BarChart3, Paperclip, Send } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
 const page = () => {
+    const router = useRouter()
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
     const [prompt, setPrompt] = useState('')
     const toggleSidebar = () => {
@@ -14,8 +16,9 @@ const page = () => {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ prompt })
-        })
-        const data = await response.json();
+        });
+        const { id } = await response.json();
+        router.push(`/workspace/${id}`)
         // setGeneratedCode(data.text);
     }
     return (

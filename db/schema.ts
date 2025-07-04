@@ -1,10 +1,27 @@
-import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  integer,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 export const usersTable = pgTable("users_table", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   age: integer("age").notNull(),
   email: text("email").notNull().unique(),
+});
+
+export const projects = pgTable("projects", {
+  id: uuid("id")
+    .default(sql`gen_random_uuid()`)
+    .primaryKey(),
+  prompt: text("prompt").notNull(),
+  code: text("code").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const postsTable = pgTable("posts_table", {
