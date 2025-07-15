@@ -7,6 +7,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
+import { title } from "process";
 
 export const usersTable = pgTable("users_table", {
   id: serial("id").primaryKey(),
@@ -37,8 +38,15 @@ export const postsTable = pgTable("posts_table", {
     .$onUpdate(() => new Date()),
 });
 
+export const promptTable = pgTable("prompt_table", {
+  id: serial("id").primaryKey(),
+  prompt: text("content").notNull(),
+  manimCode: text("manim_code").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export type InsertUser = typeof usersTable.$inferInsert;
 export type SelectUser = typeof usersTable.$inferSelect;
-
+export type PromptTable = typeof promptTable.$inferInsert;
 export type InsertPost = typeof postsTable.$inferInsert;
 export type SelectPost = typeof postsTable.$inferSelect;
