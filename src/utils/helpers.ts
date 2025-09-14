@@ -1,9 +1,15 @@
-// Mock helper function that returns user data
-export const getUserData = () => {
-  return {
-    users: [
-      { id: 1, name: 'Jane Doe' },
-      { id: 2, name: 'John Smith' }
-    ]
-  };
+interface User {
+  id: number;
+  name: string;
+}
+
+export const fetchUsers = async (): Promise<User[]> => {
+  try {
+    const response = await fetch('https://api.example.com/users');
+    const data = await response.json();
+    return data as User[];
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return [];
+  }
 };

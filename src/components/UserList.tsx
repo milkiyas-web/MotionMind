@@ -1,22 +1,22 @@
-import React, { useEffect } from 'react';
-
-// Function to fetch user data (mocked for illustration)
-const fetchUserData = () => ({
-  users: [
-    { id: 1, name: 'Jane Doe' },
-    { id: 2, name: 'John Smith' }
-  ]
-});
+import React, { useState, useEffect } from 'react';
+import { fetchUsers } from '../utils/helpers';
 
 const UserList = () => {
-  // Initialize userData to prevent ReferenceError
-  const userData = fetchUserData();
+  const [userData, setUserData] = useState([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const data = await fetchUsers();
+      setUserData(data);
+    };
+    loadData();
+  }, []);
 
   return (
     <div>
       <h2>User List</h2>
       <ul>
-        {userData.users.map(user => (
+        {userData.map(user => (
           <li key={user.id}>{user.name}</li>
         ))}
       </ul>
