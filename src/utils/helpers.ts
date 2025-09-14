@@ -1,6 +1,4 @@
-export function processUserData(userData) {
-  return userData.map(user => ({
-    id: user.id,
-    name: `${user.firstName} ${user.lastName}`
-  }));
-}
+export const fetchUserData = async () => {
+  // Implement your data fetching logic here (e.g., API call)
+  return []; // Return sample data until implementation
+};
