@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { fetchUsers } from '../utils/helpers';
+import { processUserData } from '../utils/helpers';
 
 const UserList = () => {
   const [userData, setUserData] = useState([]);
 
   useEffect(() => {
-    const loadData = async () => {
-      const data = await fetchUsers();
-      setUserData(data);
-    };
-    loadData();
+    // Fetch or initialize user data here
+    setUserData([]); // placeholder initialization
   }, []);
+
+  const processedData = processUserData(userData);
 
   return (
     <div>
-      <h2>User List</h2>
-      <ul>
-        {userData.map(user => (
-          <li key={user.id}>{user.name}</li>
-        ))}
-      </ul>
+      {processedData.map(item => (
+        <div key={item.id}>{item.name}</div>
+      ))}
     </div>
   );
 };
